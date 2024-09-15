@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "../globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
+import { dark, neobrutalism } from '@clerk/themes'
+
 
 import Bottombar from "@/components/shared/Bottombar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
@@ -25,15 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{
+      baseTheme: dark,
+    }}>
       <html lang="en">
         <body className={ inter.className }>
           <Topbar />
 
-          <main>
+          <main className='flex flex-row'>
             <LeftSidebar />
 
-            <section>
+            <section className='main-container'>
               <div className='w-full max-w-4xl'>
                 { children }
               </div>
