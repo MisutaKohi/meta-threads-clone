@@ -20,6 +20,8 @@ import Image from 'next/image';
 import { UserValidation } from "@/lib/validations/user";
 import { ChangeEvent, useState } from "react";
 import { Textarea } from "../ui/textarea";
+import { isBase64Image } from "@/lib/utils";
+import { UploadButton } from "@/lib/validations/uploadthing";
 
 interface Props {
   user: {
@@ -35,6 +37,7 @@ interface Props {
 
 const AccountProfile = ({ user, btnTitle } : Props) => {
   const [files, setFiles] = useState<File[]>([]);
+  // const { startUpload } = useUploadThing("media");
 
   const form = useForm<z.infer<typeof UserValidation>>({
     resolver: zodResolver(UserValidation),
@@ -45,10 +48,6 @@ const AccountProfile = ({ user, btnTitle } : Props) => {
       bio: user?.bio || '',
     },
   });
-
-  function onSubmit(values: z.infer<typeof UserValidation>) {
-    console.log(values);
-  }
 
   const handleImage = (e : ChangeEvent<HTMLInputElement>, fieldChange: (value: string) => void) => {
     e.preventDefault(); // prevent page reload
@@ -68,6 +67,22 @@ const AccountProfile = ({ user, btnTitle } : Props) => {
 
       fileReader.readAsDataURL(file);
     }
+  }
+
+  async function onSubmit(values: z.infer<typeof UserValidation>) {
+    const blob = values.profile_photo;
+
+    const hasImageChanged = isBase64Image(blob);
+
+    if (hasImageChanged) {
+      // const imgResponse = await startUpload(files);
+
+      // if (imgResponse && imgResponse[0].fileUrl) {
+      //   values.profile_photo = imgResponse[0].fileUrl;
+      // }
+    }
+
+    // TODO: update user profile in database
   }
 
   return (
